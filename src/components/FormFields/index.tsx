@@ -291,6 +291,24 @@ export function FieldRenderer({ field, theme, fieldSpacing = "default" }: FieldR
         </div>
       );
 
+    case "utm":
+      const utmParams = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+      return (
+        <div className="p-3 bg-muted/50 border border-dashed border-border rounded-md">
+          <p className="text-sm font-medium text-foreground mb-2">UTM Parameters</p>
+          <p className="text-xs text-muted-foreground mb-2">
+            Automatically captures URL parameters as hidden fields:
+          </p>
+          <div className="flex flex-wrap gap-1">
+            {utmParams.map((param) => (
+              <code key={param} className="text-xs bg-muted px-1.5 py-0.5 rounded">
+                {param}
+              </code>
+            ))}
+          </div>
+        </div>
+      );
+
     default:
       return null;
   }

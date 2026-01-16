@@ -12,7 +12,8 @@ export type FieldType =
   | 'url'
   | 'file'
   | 'name'
-  | 'address';
+  | 'address'
+  | 'utm';
 
 export type Theme = 'default' | 'simple' | 'underline' | 'solid';
 

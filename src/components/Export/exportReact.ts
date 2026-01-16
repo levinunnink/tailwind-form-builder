@@ -29,6 +29,8 @@ export function generateReact(fields: FormField[], config: FormConfig): string {
 
   // Generate form data state initialization
   const formDataInit: Record<string, string> = {};
+  const hasUtmFields = fields.some((f) => f.type === "utm");
+
   fields.forEach((field) => {
     if (field.type === "name") {
       formDataInit[`${field.name}_first`] = "";
@@ -40,6 +42,12 @@ export function generateReact(fields: FormField[], config: FormConfig): string {
       formDataInit[`${field.name}_state`] = "";
       formDataInit[`${field.name}_zip`] = "";
       if (field.includeCountry) formDataInit[`${field.name}_country`] = "";
+    } else if (field.type === "utm") {
+      formDataInit["utm_source"] = "";
+      formDataInit["utm_medium"] = "";
+      formDataInit["utm_campaign"] = "";
+      formDataInit["utm_term"] = "";
+      formDataInit["utm_content"] = "";
     } else if (field.type !== "file") {
       formDataInit[field.name] = field.defaultValue || "";
     }
@@ -344,6 +352,14 @@ ${radioOptions}
         </div>`;
         return addressJsx;
 
+      case "utm":
+        return `        {/* UTM Parameters (auto-populated from URL) */}
+        <input type="hidden" name="utm_source" value={formData.utm_source} />
+        <input type="hidden" name="utm_medium" value={formData.utm_medium} />
+        <input type="hidden" name="utm_campaign" value={formData.utm_campaign} />
+        <input type="hidden" name="utm_term" value={formData.utm_term} />
+        <input type="hidden" name="utm_content" value={formData.utm_content} />`;
+
       default:
         return "";
     }
@@ -352,13 +368,32 @@ ${radioOptions}
   const fieldsJsx = fields.map(renderField).join("\n\n");
   const formDataInitString = JSON.stringify(formDataInit, null, 2).replace(/"([^"]+)":/g, "$1:");
 
+  const utmUseEffect = hasUtmFields ? `
+  // Populate UTM parameters from URL
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
+    const utmValues = {};
+    utmParams.forEach(param => {
+      const value = params.get(param);
+      if (value) utmValues[param] = value;
+    });
+    if (Object.keys(utmValues).length > 0) {
+      setFormData(prev => ({ ...prev, ...utmValues }));
+    }
+  }, []);
+` : "";
+
+  const reactImports = hasUtmFields ? "import { useState, useEffect } from 'react';" : "import { useState } from 'react';";
+
   if (config.submitType === "ajax") {
-    return `import { useState } from 'react';
+    return `${reactImports}
 
 export default function ContactForm() {
   const [formData, setFormData] = useState(${formDataInitString});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+${utmUseEffect}
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -409,11 +444,11 @@ ${fieldsJsx}
 }`;
   }
 
-  return `import { useState } from 'react';
+  return `${reactImports}
 
 export default function ContactForm() {
   const [formData, setFormData] = useState(${formDataInitString});
-
+${utmUseEffect}
   return (
     <form action="${config.action}" method="${config.method}" className="space-y-6">
 ${fieldsJsx}

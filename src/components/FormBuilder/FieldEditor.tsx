@@ -85,6 +85,42 @@ export function FieldEditor() {
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
+          {/* UTM Field - Special view */}
+          {field.type === "utm" ? (
+            <section className="space-y-4">
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+                About UTM Parameters
+              </h3>
+
+              <div className="p-4 bg-muted/50 border border-border rounded-md space-y-3">
+                <p className="text-sm text-foreground">
+                  This field automatically captures Google Analytics UTM parameters from the page URL and includes them as hidden fields in your form submission.
+                </p>
+
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-muted-foreground uppercase">Captured Parameters:</p>
+                  <ul className="text-sm text-foreground space-y-1">
+                    <li><code className="bg-muted px-1.5 py-0.5 rounded text-xs">utm_source</code> - Traffic source (e.g., google, newsletter)</li>
+                    <li><code className="bg-muted px-1.5 py-0.5 rounded text-xs">utm_medium</code> - Marketing medium (e.g., cpc, email)</li>
+                    <li><code className="bg-muted px-1.5 py-0.5 rounded text-xs">utm_campaign</code> - Campaign name</li>
+                    <li><code className="bg-muted px-1.5 py-0.5 rounded text-xs">utm_term</code> - Paid search keywords</li>
+                    <li><code className="bg-muted px-1.5 py-0.5 rounded text-xs">utm_content</code> - Content variation (A/B tests)</li>
+                  </ul>
+                </div>
+
+                <div className="pt-2 border-t border-border">
+                  <p className="text-xs text-muted-foreground">
+                    Example URL: <code className="bg-muted px-1 rounded">yoursite.com?utm_source=google&utm_medium=cpc</code>
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-xs text-muted-foreground">
+                No configuration needed. Parameters are automatically read from the URL when the form loads.
+              </p>
+            </section>
+          ) : (
+          <>
           {/* Basic Settings */}
           <section className="space-y-4">
             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
@@ -382,6 +418,8 @@ export function FieldEditor() {
               </div>
             )}
           </section>
+          </>
+          )}
         </div>
       </div>
   );

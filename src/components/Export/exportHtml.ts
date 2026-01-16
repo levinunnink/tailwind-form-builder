@@ -180,12 +180,36 @@ ${radioOptions}${instructionsHtml}
     </div>`;
         return addressHtml;
 
+      case "utm":
+        return `
+    <!-- UTM Parameters (auto-populated from URL) -->
+    <input type="hidden" name="utm_source" id="utm_source" />
+    <input type="hidden" name="utm_medium" id="utm_medium" />
+    <input type="hidden" name="utm_campaign" id="utm_campaign" />
+    <input type="hidden" name="utm_term" id="utm_term" />
+    <input type="hidden" name="utm_content" id="utm_content" />`;
+
       default:
         return "";
     }
   };
 
   const fieldsHtml = fields.map(renderField).join("\n");
+  const hasUtmFields = fields.some((f) => f.type === "utm");
+
+  const utmScript = hasUtmFields ? `
+  <script>
+    // Populate UTM parameters from URL
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(function(param) {
+        const input = document.getElementById(param);
+        if (input && params.get(param)) {
+          input.value = params.get(param);
+        }
+      });
+    })();
+  </script>` : "";
 
   if (config.submitType === "ajax") {
     return `<form id="contact-form" class="space-y-6">
@@ -222,7 +246,7 @@ ${fieldsHtml}
         alert('Something went wrong. Please try again.');
       }
     });
-  </script>`;
+  </script>${utmScript}`;
   }
 
   return `<form action="${config.action}" method="${config.method}" class="space-y-6">
@@ -231,5 +255,5 @@ ${fieldsHtml}
     <div>
       <button type="submit" class="${EXPORT_BUTTON_STYLES}">${config.submitButtonText}</button>
     </div>
-  </form>`;
+  </form>${utmScript}`;
 }

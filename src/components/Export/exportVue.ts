@@ -27,6 +27,9 @@ export function generateVue(fields: FormField[], config: FormConfig): string {
   const EXPORT_INSTRUCTIONS_STYLES = config.darkMode ? EXPORT_INSTRUCTIONS_STYLES_DARK : EXPORT_INSTRUCTIONS_STYLES_LIGHT;
   const EXPORT_BUTTON_STYLES = config.darkMode ? EXPORT_BUTTON_STYLES_DARK : EXPORT_BUTTON_STYLES_LIGHT;
 
+  // Check if UTM fields are present
+  const hasUtmFields = fields.some((f) => f.type === "utm");
+
   // Generate form data refs
   const formDataRefs: string[] = [];
   fields.forEach((field) => {
@@ -40,10 +43,36 @@ export function generateVue(fields: FormField[], config: FormConfig): string {
       formDataRefs.push(`const ${field.name}_state = ref('')`);
       formDataRefs.push(`const ${field.name}_zip = ref('')`);
       if (field.includeCountry) formDataRefs.push(`const ${field.name}_country = ref('')`);
+    } else if (field.type === "utm") {
+      formDataRefs.push(`const utm_source = ref('')`);
+      formDataRefs.push(`const utm_medium = ref('')`);
+      formDataRefs.push(`const utm_campaign = ref('')`);
+      formDataRefs.push(`const utm_term = ref('')`);
+      formDataRefs.push(`const utm_content = ref('')`);
     } else if (field.type !== "file") {
       formDataRefs.push(`const ${field.name} = ref('${field.defaultValue || ""}')`);
     }
   });
+
+  // Generate onMounted hook for UTM params
+  const utmOnMounted = hasUtmFields ? `
+onMounted(() => {
+  const params = new URLSearchParams(window.location.search)
+  const utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
+  utmParams.forEach(param => {
+    const value = params.get(param)
+    if (value) {
+      switch(param) {
+        case 'utm_source': utm_source.value = value; break
+        case 'utm_medium': utm_medium.value = value; break
+        case 'utm_campaign': utm_campaign.value = value; break
+        case 'utm_term': utm_term.value = value; break
+        case 'utm_content': utm_content.value = value; break
+      }
+    }
+  })
+})
+` : "";
 
   const renderField = (field: FormField): string => {
     const isRequired = field.validation.some((v) => v.type === "required");
@@ -304,6 +333,14 @@ ${radioOptions}
       </div>`;
         return addressTemplate;
 
+      case "utm":
+        return `      <!-- UTM Parameters (auto-populated from URL) -->
+      <input type="hidden" name="utm_source" :value="utm_source" />
+      <input type="hidden" name="utm_medium" :value="utm_medium" />
+      <input type="hidden" name="utm_campaign" :value="utm_campaign" />
+      <input type="hidden" name="utm_term" :value="utm_term" />
+      <input type="hidden" name="utm_content" :value="utm_content" />`;
+
       default:
         return "";
     }
@@ -313,11 +350,12 @@ ${radioOptions}
 
   if (config.submitType === "ajax") {
     return `<script setup>
-import { ref } from 'vue'
+import { ref${hasUtmFields ? ", onMounted" : ""} } from 'vue'
 
 ${formDataRefs.join("\n")}
 const isSubmitted = ref(false)
 const isLoading = ref(false)
+${utmOnMounted}
 
 const handleSubmit = async () => {
   isLoading.value = true
@@ -325,7 +363,7 @@ const handleSubmit = async () => {
   try {
     const formData = {
       ${fields
-        .filter((f) => f.type !== "file")
+        .filter((f) => f.type !== "file" && f.type !== "utm")
         .map((f) => {
           if (f.type === "name") {
             return `${f.name}_first: ${f.name}_first.value,\n      ${f.name}_last: ${f.name}_last.value`;
@@ -340,7 +378,12 @@ const handleSubmit = async () => {
           }
           return `${f.name}: ${f.name}.value`;
         })
-        .join(",\n      ")}
+        .join(",\n      ")}${hasUtmFields ? `,
+      utm_source: utm_source.value,
+      utm_medium: utm_medium.value,
+      utm_campaign: utm_campaign.value,
+      utm_term: utm_term.value,
+      utm_content: utm_content.value` : ""}
     }
 
     const response = await fetch('${config.action}', {
@@ -384,10 +427,10 @@ ${fieldsTemplate}
   }
 
   return `<script setup>
-import { ref } from 'vue'
+import { ref${hasUtmFields ? ", onMounted" : ""} } from 'vue'
 
 ${formDataRefs.join("\n")}
-</script>
+${utmOnMounted}</script>
 
 <template>
   <form action="${config.action}" method="${config.method}" class="space-y-6">

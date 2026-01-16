@@ -108,6 +108,13 @@ export const FIELD_DEFINITIONS: FieldDefinition[] = [
     category: 'advanced',
     defaultLabel: 'Address',
   },
+  {
+    type: 'utm',
+    label: 'UTM Params',
+    icon: 'Link',
+    category: 'advanced',
+    defaultLabel: 'UTM Parameters',
+  },
 ];
 
 export const THEME_STYLES: Record<Theme, { input: string; label: string; description: string }> = {
