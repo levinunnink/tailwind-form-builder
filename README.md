@@ -108,7 +108,6 @@ Contributions are welcome! Feel free to:
 This project is sponsored by:
 
 - [Sheet Monkey](https://sheetmonkey.io) - Save form submissions to Google Sheets
-- [Smmall](https://smmall.io) - Simple website builder
 
 ## License
 

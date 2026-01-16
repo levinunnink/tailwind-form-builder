@@ -19,6 +19,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { SortableField } from "./SortableField";
+import Image from "next/image";
 
 export function FormPreview() {
   const { fields, config, selectedFieldId, selectField, reorderFields } = useFormStore();
@@ -45,23 +46,8 @@ export function FormPreview() {
   if (fields.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-center p-8">
-        <div className="w-16 h-16 mb-4 rounded-full bg-muted flex items-center justify-center">
-          <svg
-            className="w-8 h-8 text-muted-foreground"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            />
-          </svg>
-        </div>
-        <h3 className="text-lg font-medium text-foreground mb-2">No fields yet</h3>
+        <Image src="/hero-empty.png" alt="No fields" width={300} height={100} />
+        <h3 className="text-lg font-medium text-foreground mb-2 mt-4">Ready to start?</h3>
         <p className="text-muted-foreground max-w-sm">
           Click on a field type from the right panel to add it to your form, or choose a
           template to get started.

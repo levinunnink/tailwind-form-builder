@@ -19,6 +19,11 @@
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --ring: #4f46e5;
+
+  /* Builder UI colors */
+  --builder-blue: #CDE8FF;
+  --builder-red: #D93322;
+  --builder-green: #309845;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,6 +45,11 @@
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
     --ring: #6366f1;
+
+    /* Builder UI colors - slightly adjusted for dark mode */
+    --builder-blue: #3b82f6;
+    --builder-red: #ef4444;
+    --builder-green: #22c55e;
   }
 }
 
@@ -61,8 +71,12 @@
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-ring: var(--ring);
+  --color-builder-blue: var(--builder-blue);
+  --color-builder-red: var(--builder-red);
+  --color-builder-green: var(--builder-green);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-headline: var(--font-slackey);
 }
 
 body {

@@ -102,7 +102,7 @@ export function ExportModal({ onClose }: ExportModalProps) {
                 className={`
                   flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors
                   ${activeFormat === format.id
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-foreground text-background"
                     : "text-muted-foreground hover:text-foreground hover:bg-accent"
                   }
                 `}
@@ -154,7 +154,7 @@ export function ExportModal({ onClose }: ExportModalProps) {
               <Icons.Upload className="w-4 h-4 mr-2 rotate-180" />
               Download
             </Button>
-            <Button onClick={handleCopy}>
+            <Button variant="ghost" className="!bg-foreground !text-background hover:!bg-foreground/80" onClick={handleCopy}>
               {copied ? (
                 <>
                   <Icons.Check className="w-4 h-4 mr-2" />

@@ -11,6 +11,7 @@ import { AboutModal } from "./AboutModal";
 import { ExportModal } from "@/components/Export/ExportModal";
 import { Button } from "@/components/ui/Button";
 import { Icons } from "@/components/ui/Icons";
+import Image from "next/image";
 
 export function FormBuilder() {
   const [showSettings, setShowSettings] = useState(false);
@@ -39,27 +40,41 @@ export function FormBuilder() {
           className="fixed bottom-4 left-4 p-2 bg-card border border-border rounded-full shadow-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
           title="About"
         >
-          <Icons.Info className="w-5 h-5" />
+          <Image src={"/info.png"} alt="info" width={60} height={60} />
         </button>
       </div>
 
       {/* Right Panel - Sidebar */}
       <div className="w-80 bg-card h-screen flex flex-col flex-shrink-0 shadow-[-4px_0_12px_rgba(0,0,0,0.08)]">
         {/* Top - Settings & Templates */}
-        <div className="p-4 border-b border-border space-y-3">
-          <h1 className="text-lg font-semibold text-foreground">
+        <div className="relative bg-card dark:bg-card border-b border-border">
+
+          <div className="p-4 space-y-3">
+          <h1 className="text-2xl text-foreground hidden">
             Tailwind Form Builder
           </h1>
           <p className="text-sm">Build your tailwind forms and export them for HTML, React, and Vue.</p>
-          <a
-            href="https://github.com/levinunnink/tailwind-form-builder"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Icons.GitHub className="w-3.5 h-3.5" />
-            Star on GitHub
-          </a>
+          <div className="flex flex-row space-x-3 items-center">
+            <a
+              href="https://github.com/levinunnink/tailwind-form-builder"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Icons.GitHub className="w-3.5 h-3.5" />
+              Star on GitHub
+            </a>
+            <a
+              href="https://github.com/levinunnink/tailwind-form-builder"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Icons.Info className="w-3.5 h-3.5" />
+              Learn more
+            </a>
+          </div>
+          </div>
         </div>
 
         {/* Middle - Field Palette (scrollable) */}
@@ -77,8 +92,8 @@ export function FormBuilder() {
         </div>
         <div className="p-4 border-t border-border">
           <Button
-            variant="primary"
-            className="w-full"
+            variant="ghost"
+            className="w-full !bg-foreground !text-background hover:!bg-foreground/80"
             onClick={() => setShowExport(true)}
             disabled={fields.length === 0}
           >

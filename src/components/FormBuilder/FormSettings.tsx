@@ -62,7 +62,7 @@ export function FormSettings({ onClose }: FormSettingsProps) {
             href="https://sheetmonkey.io"
             target="_blank"
             rel="noopener noreferrer"
-            className="block text-xs text-muted-foreground hover:text-primary transition-colors"
+            className="block text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             Need somewhere to save your form data? Try <span className="underline">Sheet Monkey</span> to send submissions to Google Sheets.
           </a>
@@ -92,7 +92,7 @@ export function FormSettings({ onClose }: FormSettingsProps) {
                 value="standard"
                 checked={config.submitType === "standard"}
                 onChange={() => updateConfig({ submitType: "standard" })}
-                className="text-primary focus:ring-primary"
+                className="text-foreground focus:ring-foreground"
               />
               <span className="text-sm text-foreground">Standard</span>
             </label>
@@ -103,7 +103,7 @@ export function FormSettings({ onClose }: FormSettingsProps) {
                 value="ajax"
                 checked={config.submitType === "ajax"}
                 onChange={() => updateConfig({ submitType: "ajax" })}
-                className="text-primary focus:ring-primary"
+                className="text-foreground focus:ring-foreground"
               />
               <span className="text-sm text-foreground">AJAX</span>
             </label>
@@ -148,7 +148,7 @@ export function FormSettings({ onClose }: FormSettingsProps) {
                 className={`
                   flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors
                   ${config.fieldSpacing === key
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-foreground text-background"
                     : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
                   }
                 `}
@@ -169,7 +169,7 @@ export function FormSettings({ onClose }: FormSettingsProps) {
               className={`
                 flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors
                 ${config.darkMode
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-foreground text-background"
                   : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
                 }
               `}
@@ -192,7 +192,7 @@ export function FormSettings({ onClose }: FormSettingsProps) {
                 className={`
                   flex items-start gap-3 p-3 rounded-lg border-2 cursor-pointer transition-colors
                   ${config.theme === key
-                    ? "border-primary bg-primary/5"
+                    ? "border-foreground bg-muted"
                     : "border-border hover:border-muted-foreground"
                   }
                 `}
@@ -203,7 +203,7 @@ export function FormSettings({ onClose }: FormSettingsProps) {
                   value={key}
                   checked={config.theme === key}
                   onChange={() => updateConfig({ theme: key })}
-                  className="mt-1 text-primary focus:ring-primary"
+                  className="mt-1 text-foreground focus:ring-foreground"
                 />
                 <div>
                   <span className="block font-medium text-foreground">{value.label}</span>
