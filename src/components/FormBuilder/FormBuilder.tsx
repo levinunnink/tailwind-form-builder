@@ -64,15 +64,13 @@ export function FormBuilder() {
               <Icons.GitHub className="w-3.5 h-3.5" />
               Star on GitHub
             </a>
-            <a
-              href="https://github.com/levinunnink/tailwind-form-builder"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => setShowAbout(true)}
               className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               <Icons.Info className="w-3.5 h-3.5" />
               Learn more
-            </a>
+            </button>
           </div>
           </div>
         </div>
